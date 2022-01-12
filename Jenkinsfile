@@ -33,7 +33,7 @@ pipeline{
               influxDbPublisher(
                 selectedTarget: 'InfluxDB DORA',
                 customData: [
-                    commits: changeLogSets.toString()
+                    commit: "${GIT_COMMIT}"
                   ]
               )
             }
