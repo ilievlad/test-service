@@ -26,7 +26,17 @@ pipeline{
         }
         success{
             echo "========pipeline executed successfully ========"
-            influxDbPublisher selectedTarget: 'InfluxDB DORA'
+            script {
+              def changeLogSets = currentBuild.changeSets
+              echo changeLogSets.toString()
+
+              influxDbPublisher(
+                selectedTarget: 'InfluxDB DORA',
+                customData: [
+                    commits: changeLogSets.toString()
+                  ]
+              )
+            }
         }
         failure{
             echo "========pipeline execution failed========"
