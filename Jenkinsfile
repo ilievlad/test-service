@@ -6,8 +6,10 @@ pipeline{
         stage("Test"){
             steps{
                 echo "Testing pipeline"
-                withCredentials([string(credentialsId: 'doraToken', variable: 'dora-token')]) {
-                    end_dora_deployment(currentBuicld.result, doraToken, "https://dora.vivino.com/event-handler")
+                withCredentials([string(credentialsId: 'dora-token', variable: 'doraToken')]) {
+                    script {
+                        end_dora_deployment(currentBuicld.result, doraToken, "https://dora.vivino.com/event-handler")
+                    }
                 }
             }
         }
@@ -21,9 +23,9 @@ pipeline{
             post{
                 success{
                     echo "notifying DORA of successful deployment"
-                    script {
-                        withCredentials([string(credentialsId: 'dora-token', variable: 'dora-token')]) {
-                            send_dora_deployment(currentBuicld.result, dora-token, "https://dora.vivino.com/event-handler")
+                     withCredentials([string(credentialsId: 'dora-token', variable: 'doraToken')]) {
+                        script {
+                            end_dora_deployment(currentBuicld.result, doraToken, "https://dora.vivino.com/event-handler")
                         }
                     }
                 }
