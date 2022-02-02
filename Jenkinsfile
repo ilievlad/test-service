@@ -8,7 +8,7 @@ pipeline{
                 echo "Testing pipeline"
                 withCredentials([string(credentialsId: 'dora-token', variable: 'doraToken')]) {
                     script {
-                        end_dora_deployment(currentBuild.result, doraToken, "https://dora.vivino.com/event-handler")
+                        send_dora_deployment(currentBuild.result, doraToken, "https://dora.vivino.com/event-handler")
                     }
                 }
             }
@@ -25,7 +25,7 @@ pipeline{
                     echo "notifying DORA of successful deployment"
                      withCredentials([string(credentialsId: 'dora-token', variable: 'doraToken')]) {
                         script {
-                            end_dora_deployment(currentBuild.result, doraToken, "https://dora.vivino.com/event-handler")
+                            send_dora_deployment(currentBuild.result, doraToken, "https://dora.vivino.com/event-handler")
                         }
                     }
                 }
