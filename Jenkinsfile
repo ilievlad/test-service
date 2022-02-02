@@ -6,7 +6,9 @@ pipeline{
         stage("Test"){
             steps{
                 echo "Testing pipeline"
-                send_dora_deployment(currentBuild.result, dora-token, "https://dora.vivino.com/event-handler")
+                withCredentials([string(credentialsId: 'doraToken', variable: 'dora-token')]) {
+                    end_dora_deployment(currentBuicld.result, doraToken, "https://dora.vivino.com/event-handler")
+                }
             }
         }
         stage("Deploy"){
@@ -44,7 +46,7 @@ pipeline{
     }
 }
 
-def send_dora_deployment(String buildStatus = 'STARTED', dora_token, dora_url) {
+def send_dora_deployment(String buildStatus = 'STARTED', doraToken, doraUrl) {
     // build status of null means successful
     buildStatus = buildStatus ?: 'SUCCESS'
 
@@ -68,5 +70,5 @@ def send_dora_deployment(String buildStatus = 'STARTED', dora_token, dora_url) {
     ]
 
     json_payload = writeJSON text: payload, returnText: true
-    sh "curl -X POST -H 'Content-Type: application/json' -H 'X-Jenkins-Token:${dora_token}' -d '${json_payload}' ${dora_url}"
+    sh "curl -X POST -H 'Content-Type: application/json' -H 'X-Jenkins-Token:${doraToken}' -d '${json_payload}' ${doraUrl}"
 }
