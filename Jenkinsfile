@@ -6,7 +6,7 @@ pipeline{
         stage("Test"){
             steps{
                 echo "Testing pipeline"
-                send_dora_deployment(currentBuicld.result, dora-token, "https://dora.vivino.com/event-handler")
+                send_dora_deployment(currentBuild.result, dora-token, "https://dora.vivino.com/event-handler")
             }
         }
         stage("Deploy"){
