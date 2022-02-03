@@ -6,7 +6,6 @@ pipeline{
         stage("Test"){
             steps{
                 echo "Testing pipeline"
-                sh 'printenv'
                 withCredentials([string(credentialsId: 'dora-token', variable: 'doraToken')]) {
                     send_dora_deployment(currentBuild.result, doraToken, "https://dora.vivino.com/event-handler")
                 }
@@ -52,13 +51,14 @@ def send_dora_deployment(String buildStatus = 'STARTED', doraToken, doraUrl) {
     echo "${env.GIT_COMMIT}"
     echo "${env.GIT_BRANCH}"
     echo "${env.CHANGE_AUTHOR}"
+    buildTimestamp = new Date().format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('UTC'))
 
     payload = [
         buildStatus: "${buildStatus}",
         buildUrl: "${env.BUILD_URL})",
         buildNumber: "${env.BUILD_NUMBER}",
         buildDuration: currentBuild.duration,
-        buildTimestamp: currentBuild.startTimeInMillis,
+        buildTimestamp: buildTimestamp,
         buildTag: "${env.BUILD_TAG}",
         buildBranch: "${env.GIT_BRANCH}",
         buildUrl: "${env.BUILD_URL}",
@@ -67,7 +67,9 @@ def send_dora_deployment(String buildStatus = 'STARTED', doraToken, doraUrl) {
         commitMessage: "${env.CHANGE_TITLE}",
         buildCauses: currentBuild.getBuildCauses().toString()
     ]
+
     echo payload.toString()
+
     signature = UUID.randomUUID().toString()
     json_payload = writeJSON json: payload, returnText: true
     sh('curl -X POST -H "Content-Type: application/json" -H "X-Jenkins-Token: $doraToken" ' + "-H 'X-Jenkins-Signature: ${signature}' -d '${json_payload}' ${doraUrl}")
