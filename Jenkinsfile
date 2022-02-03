@@ -71,6 +71,7 @@ def send_dora_deployment(String buildStatus = 'STARTED', doraToken, doraUrl) {
         commitMessage: "${env.$GIT_MESSAGE}",
     ]
 
-    json_payload = writeJSON text: payload, returnText: true
-    sh "curl -X POST -H 'Content-Type: application/json' -H 'X-Jenkins-Token:${doraToken}' -d '${json_payload}' ${doraUrl}"
+    signature = UUID.randomUUID().toString()
+    json_payload = writeJSON json: payload, returnText: true
+    sh "curl -X POST -H 'Content-Type: application/json' -H 'X-Jenkins-Token:${doraToken}' -H 'X-Jenkins-Signature: ${signature}' -d '${json_payload}' ${doraUrl}"
 }
