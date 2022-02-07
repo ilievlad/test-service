@@ -6,9 +6,6 @@ pipeline{
         stage("Test"){
             steps{
                 echo "Testing pipeline"
-                withCredentials([string(credentialsId: 'dora-token', variable: 'doraToken')]) {
-                    send_dora_deployment(currentBuild.result, doraToken, "https://dora.vivino.com/event-handler")
-                }
             }
         }
         stage("Deploy"){
@@ -21,8 +18,7 @@ pipeline{
             post{
                 success{
                     echo "notifying DORA of successful deployment"
-                     withCredentials([string(credentialsId: 'dora-token', variable: 'doraToken')]) {
-                        sh 'printenv'
+                    withCredentials([string(credentialsId: 'dora-token', variable: 'doraToken')]) {
                         send_dora_deployment(currentBuild.result, doraToken, "https://dora.vivino.com/event-handler")
                     }
                 }
