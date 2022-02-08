@@ -50,6 +50,7 @@ def send_dora_deployment(String buildStatus = 'STARTED', doraToken, doraUrl) {
     buildTimestamp = new Date().format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('UTC'))
 
     payload = [
+        projectName: "test-service",
         buildStatus: "${buildStatus}",
         buildUrl: "${env.BUILD_URL})",
         buildNumber: "${env.BUILD_NUMBER}",
