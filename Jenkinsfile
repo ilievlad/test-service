@@ -47,7 +47,7 @@ def send_dora_deployment(String buildStatus = 'STARTED', doraToken, doraUrl) {
     echo "${env.GIT_COMMIT}"
     echo "${env.GIT_BRANCH}"
     echo "${env.CHANGE_AUTHOR}"
-    buildTimestamp = new Date().format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('UTC'))
+    buildTimestamp = new Date().format('yyyy-MM-ddTHH:mm:ss', TimeZone.getTimeZone('UTC'))
 
     payload = [
         buildStatus: "${buildStatus}",
