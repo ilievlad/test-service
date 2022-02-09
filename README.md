@@ -2,5 +2,4 @@
 Use to test various aspects like CICD, OPS, Metrics, etc.
 
 This is a clean deploy.
-
-will introduce a bug in prod
+Solved the bug in prod
