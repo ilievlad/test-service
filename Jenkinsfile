@@ -6,8 +6,10 @@ pipeline{
         stage("Test"){
             steps{
                 echo "Testing pipeline"
-                for (comment in pullRequest.comments) {
-                    echo "Author: ${comment.user}, Comment: ${comment.body}"
+                script {
+                    for (comment in pullRequest.comments) {
+                        echo "Author: ${comment.user}, Comment: ${comment.body}"
+                    }
                 }
             }
         }
