@@ -9,6 +9,9 @@ pipeline{
                 script {
                     for (comment in pullRequest.comments) {
                         echo "Author: ${comment.user}, Comment: ${comment.body}"
+                        if (comment.body.contains("awesome")) {
+                            pullRequest.editComment(comment.id, "this is a very edited comment")
+                        }
                     }
                 }
             }
