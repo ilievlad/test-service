@@ -1,54 +1,17 @@
-// execute this before anything else, including requesting any time on an agent
-if (currentBuild.getBuildCauses().toString().contains('BranchIndexingCause')) {
-  print "INFO: Build skipped due to trigger being Branch Indexing"
-  print "INFO: Using last completed build result..."
-  currentBuild.result = currentBuild.previousCompletedBuild.result
-  return
+@Library('pipeline-library-misc@jenkins-libs/fix/branch_indexing') _
+timestamps {
+    buildRepo([
+        "stagingEnv": "",
+        "releaseTag": [
+            baseBranch: "main",
+            environment: "testing"
+        ],
+        "buildArguments": [
+            "ENVIRONMENT": "testing"
+        ]
+    ])
 }
 
-
-pipeline{
-    agent{
-        label "docker-ng"
-    }
-    stages{
-        stage("Test"){
-            steps{
-                echo "Testing pipeline"
-            }
-        }
-        stage("Deploy"){
-            when {
-                branch "main"
-            }
-            steps{
-                echo "deploying to production"
-            }
-            post{
-                success{
-                    echo "notifying DORA of successful deployment"
-//                     withCredentials([string(credentialsId: 'dora-token', variable: 'doraToken')]) {
-//                         send_dora_deployment(currentBuild.result, doraToken, "https://dora.vivino.com/event-handler")
-//                     }
-                }
-                unsuccessful{
-                    echo "notifying DORA of unsuccessful deployment"
-                }
-            }
-        }
-    }
-    post{
-        always{
-            echo "========always========"
-        }
-        success{
-            echo "========pipeline executed successfully ========"
-        }
-        failure{
-            echo "========pipeline execution failed========"
-        }
-    }
-}
 
 def send_dora_deployment(String buildStatus = 'STARTED', doraToken, doraUrl) {
     // build status of null means successful
