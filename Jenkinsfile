@@ -1,8 +1,8 @@
 // execute this before anything else, including requesting any time on an agent
 if (currentBuild.getBuildCauses().toString().contains('BranchIndexingCause')) {
-  print "INFO: Build skipped due to trigger being Branch Indexing"
-//   currentBuild.result = currentBuild.previousCompletedBuild.result // This is needed so branching doesn't fail the PR (aborted means fail in github).
-  currentBuild.delete()
+  print "INFO: Build skipped due to trigger being Branch Indexing
+  print "INFO: Using last completed build result..."
+  currentBuild.result = currentBuild.previousCompletedBuild.result
   return
 }
 
