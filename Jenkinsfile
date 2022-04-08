@@ -18,9 +18,9 @@ pipeline{
             post{
                 success{
                     echo "notifying DORA of successful deployment"
-                    withCredentials([string(credentialsId: 'dora-token', variable: 'doraToken')]) {
-                        send_dora_deployment(currentBuild.result, doraToken, "https://dora.vivino.com/event-handler")
-                    }
+//                     withCredentials([string(credentialsId: 'dora-token', variable: 'doraToken')]) {
+//                         send_dora_deployment(currentBuild.result, doraToken, "https://dora.vivino.com/event-handler")
+//                     }
                 }
                 unsuccessful{
                     echo "notifying DORA of unsuccessful deployment"
