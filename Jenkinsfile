@@ -14,6 +14,7 @@ pipeline{
         stage("Test"){
             steps{
                 echo "Testing pipeline"
+                sh 'false'
             }
         }
         stage("Deploy"){
